@@ -1,4 +1,4 @@
-# Coding style guides for GyazSquare
+# Style guides for GyazSquare
 
 ## Introduction
 
