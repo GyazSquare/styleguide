@@ -4,7 +4,7 @@
 
 Style guides include the guidelines for the standard coding that engineers should follow. This project holds the guidelines we use for GyazSquare code.
 
-Style guides are important to engineers for a number of reasons:
+Style guides are important to engineers for a number of reasons ([*Java Code Conventions* Revised September 12, 1997](http://www.oracle.com/technetwork/java/codeconventions-150003.pdf)):
 
 * 80% of the lifetime cost of a piece of software goes to maintenance.
 * Hardly any software is maintained for its whole life by the original author.
