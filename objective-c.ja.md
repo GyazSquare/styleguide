@@ -1,6 +1,6 @@
 # Objective-Cスタイルガイド
 
-改定日：2015/09/21
+改定日：2017/08/14
 
 ## はじめに
 
@@ -565,9 +565,11 @@ viewController.completionHandler =  ^(NSInteger result) {
 ### プロパティの属性
 
 * プロパティの属性は以下の順番で定義すること（推奨）。デフォルトの属性は記述不要（推奨）。
+    * `class`
     * `atomic` (default) / `nonatomic`
     * `readwrite` (default) / `readonly`
     * `strong` (default for object) / `copy` / `assign` (default for non-object) / `weak`
+    * `nullable` / `nonnull`
     * `getter`
     * `setter`
 
@@ -1034,5 +1036,7 @@ Cocoa Touchフレームワーク（modules）／C標準ヘッダ／フレーム�
 
 ## 改定履歴
 
+* 2017/08/14
+    * プロパティの属性に `class` と `nullable` / `nonnull` を追加。
 * 2015/09/21
     * 『Objective-Cスタイルガイド』の初版。
