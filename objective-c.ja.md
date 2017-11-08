@@ -10,7 +10,7 @@
 以下はAppleからのスタイルガイドに関するドキュメントである。
 基本はAppleのスタイルを踏襲するため、これらのドキュメンとは必ず一度は目を通すこと。
 
-* [Coding Guidelines for Cocoa](https://developer.apple.com/library/ios/releasenotes/ObjectiveC/ObjCAvailabilityIndex/index.html)（[Cocoa向け コーディングガイドライン](https://developer.apple.com/jp/devcenter/ios/library/documentation/CodingGuidelines.pdf)）
+* [Coding Guidelines for Cocoa](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CodingGuidelines/CodingGuidelines.html)（[Cocoa向け コーディングガイドライン](https://developer.apple.com/jp/devcenter/ios/library/documentation/CodingGuidelines.pdf)）
 
     Cocoaコーディング規約。コード命名の基本、メソッドの命名、関数の命名、プロパティとデータタイプの命名、許容された略語一覧が記載されている。
 
@@ -30,7 +30,7 @@
 
     Cocoa Touchアプリの64-bit移行ガイド。
 
-* [App Programming Guide for iOS](https://developer.apple.com/library/ios/documentation/iphone/conceptual/iphoneosprogrammingguide/Introduction/Introduction.html)（[iOSアプリケーション プログラミングガイド](https://developer.apple.com/jp/devcenter/ios/library/documentation/iPhoneAppProgrammingGuide.pdf)）
+* [App Programming Guide for iOS](https://developer.apple.com/library/ios/documentation/iphone/conceptual/iphoneosprogrammingguide/Introduction/Introduction.html)（[iOSアプリケーション プログラミングガイド](https://developer.apple.com/jp/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/Introduction/Introduction.html)）
 
     アプリがiOSで適切に動作するようにするために考慮すべき主な事項の解説。
 
