@@ -1,6 +1,6 @@
 # Objective-Cスタイルガイド
 
-改定日：2017/11/08
+改定日：2018/04/12
 
 ## はじめに
 
@@ -925,6 +925,41 @@ typedef NS_ENUM(NSInteger, GSLIMAPProtocolError) {
 * Objective-CのクラスをObjective-C++`.mm`ファイルに記述し、Cコンパイラでビルドしないこと。
     * リンクできるが、実行時に予期せぬエラーを引き起こすため。
 
+## API可用性
+
+* Base SDKがmacOS 10.13、iOS 11、tvOS 11、watchOS 4 (Xcode 9) 以降の場合は `@available` を利用して実行時システムバージョンをチェックすること。
+
+```objective-c
+if (@available(macOS 10.13, iOS 11, *)) {
+    // Use macOS 10.13 APIs on macOS, and use iOS 11 APIs on iOS
+} else {
+    // Fall back to earlier macOS and iOS APIs
+}
+```
+
+* Base SDKが上記より前の場合は、下記ドキュメントに従い、ウィークリンクを用いるか、システムバージョンに依存する処理の場合は `NSProcessInfo` (`Foundation`)、`UIDevice` (`UIKit`) を用いること。
+
+    * [SDK Compatibility Guide](https://developer.apple.com/library/content/documentation/DeveloperTools/Conceptual/cross_development/Introduction/Introduction.html#//apple_ref/doc/uid/10000163-BCICHGIE)（[SDK互換性ガイド](https://developer.apple.com/jp/documentation/cross_development.pdf)）
+
+
+```objective-c
+NSString *requiredSystemVersion = @"10";
+if ([UIDevice.currentDevice.systemVersion compare:requiredSystemVersion options:NSNumericSearch] != NSOrderedDescending) {
+    // Use iOS 10 APIs on iOS, and use tvOS 10 APIs on tvOS
+} else {
+    // Fall back to earlier iOS and tvOS APIs
+}
+```
+
+```objective-c
+NSOperatingSystemVersion requiredSystemVersion = (NSOperatingSystemVersion){10, 0, 0};
+if ([NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:requiredSystemVersion]) {
+    // Use macOS 10 APIs, iOS 10 APIs, watchOS 10 APIs, and tvOS 10 APIs
+} else {
+    // Fall back to earlier macOS, iOS, watchOS, and tvOS APIs
+}
+```
+
 <!-- ## Swift対応 -->
 <!-- -->
 <!-- ### Null許容性 -->
@@ -1093,6 +1128,7 @@ NS_ASSUME_NONNULL_END
 
 * 2018/04/12
     * ブロックを追加。
+    * API可用性を追加。
     * コード構成を修正。
 * 2017/11/08
     * リンクを修正。
