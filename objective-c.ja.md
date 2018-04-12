@@ -561,6 +561,54 @@ viewController.completionHandler =  ^(NSInteger result) {
 };
 ```
 
+## ブロック
+
+### ブロックの宣言
+
+```objective-c
+int multiplier = 7;
+int (^myBlock)(int) = ^(int num) {
+    return num * multiplier;
+};
+```
+
+![blocks.jpg](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/Blocks/Art/blocks.jpg)
+
+* 引数リストには必ず指定すること。引数を取らない場合は `void` を指定すること。
+* 特定のシグネチャを持つブロックを複数の場所で使用する場合は、その型を作成すること。
+
+```objective-c
+void (^blockReturningVoidWithVoidArgument)(void);
+int (^blockReturningIntWithIntAndCharArguments)(int, char);
+void (^arrayOfTenBlocksReturningVoidWithIntArgument[10])(int);
+```
+
+```objective-c
+typedef NSComparisonResult (^NSComparator)(id obj1, id obj2);
+```
+
+### ブロックの実装
+
+* 戻り値は自動的に推論されるため、明示的に記述せず省略すること。
+* 戻り値が推論され、引数を取らない場合は `(void)` パラメータリストを省略すること。
+
+```objective-c
+// 引数を取る場合
+int (^oneFrom)(int);
+
+oneFrom = ^(int anInt) {
+    return anInt - 1;
+};
+
+// 引数を取らない場合
+int (^getInt)(void);
+
+getInt = ^{
+    int i = 1;
+    return i;
+};
+```
+
 ## プロパティ
 
 ### プロパティの属性
@@ -1048,6 +1096,7 @@ NS_ASSUME_NONNULL_END
 ## 改定履歴
 
 * 2018/04/12
+    * ブロックを追加。
     * コード構成を修正。
 * 2017/11/08
     * リンクを修正。
