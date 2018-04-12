@@ -110,7 +110,7 @@ NSRange range2 = [string1 rangeOfString:string2 options:NSCaseInsensitiveSearch 
 例）定数の定義
 
 ```objective-c
-NSString * const GSErrorDomain = @"Generic Error Domain";
+NSString * const GSLErrorDomain = @"Generic Error Domain";
 ```
 
 例）三項演算子
@@ -122,13 +122,13 @@ return (string && string.length > 0) ? @"Succeeded." : @"Failed.";
 例）クラス宣言の開始部分
 
 ```objective-c
-@interface GSViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface GSLViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 ```
 
 例）クラス拡張の開始部分
 
 ```objective-c
-@interface GSViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface GSLViewController () <UITableViewDataSource, UITableViewDelegate>
 ```
 
 ### フォーマット
@@ -302,7 +302,7 @@ switch (expression) {
 ```objective-c
 static NSMutableArray *sKnownRegions = nil;
 + (instancetype)bundleWithPath:(NSString *)path;
-extern NSString * const GSIMAPProtocolErrorDomain;
+extern NSString * const GSLIMAPProtocolErrorDomain;
 ```
 
 **Wrong:**
@@ -310,7 +310,7 @@ extern NSString * const GSIMAPProtocolErrorDomain;
 ```objective-c
 static NSMutableArray* sKnownRegions = nil;
 + (instancetype)bundleWithPath:(NSString*)path;
-extern NSString *const GSIMAPProtocolErrorDomain;
+extern NSString *const GSLIMAPProtocolErrorDomain;
 ```
 
 ## 命名規則
@@ -436,7 +436,7 @@ static NSMutableArray *s_knownRegions = nil;
 ```
 
 ```objective-c
-// XXX: GSCalendarManager doesn't have the function to reset the access token.
+// XXX: GSLCalendarManager doesn't have the function to reset the access token.
 ```
 
 ## 変数
@@ -503,8 +503,8 @@ ClassName * qualifier variableName;
 ```
 
 ```objective-c
-GSClass * __weak weakReference;
-GSClass * __unsafe_unretained unsafeReference;
+GSLClass * __weak weakReference;
+GSLClass * __unsafe_unretained unsafeReference;
 ```
 
 ### __block変数
@@ -513,7 +513,7 @@ GSClass * __unsafe_unretained unsafeReference;
     * 使用後は`nil`を必ず代入すること。
 
 ```objective-c
-__block GSViewController *viewController = [GSViewController alloc] init…];
+__block GSLViewController *viewController = [GSLViewController alloc] init…];
 // ...
 viewController.completionHandler = ^(NSInteger result) {
     [viewController dismissViewControllerAnimated:YES completion:nil];
@@ -528,11 +528,11 @@ viewController.completionHandler = ^(NSInteger result) {
 **Right:**
 
 ```objective-c
-GSViewController *viewController = [[GSViewController alloc] init…];
+GSLViewController *viewController = [[GSLViewController alloc] init…];
 // ...
-GSViewController * __weak weakViewController = viewController;
+GSLViewController * __weak weakViewController = viewController;
 viewController.completionHandler = ^(NSInteger result) {
-    GSViewController *strongViewController = weakViewController; // スコープ終了までは保持されることが保証される。
+    GSLViewController *strongViewController = weakViewController; // スコープ終了までは保持されることが保証される。
     if (strongViewController) {
         // ...
         [strongViewController dismissViewControllerAnimated:YES completion:nil];
@@ -545,9 +545,9 @@ viewController.completionHandler = ^(NSInteger result) {
 **Wrong:**
 
 ```objective-c
-GSViewController *viewController = [[GSViewController alloc] init…];
+GSLViewController *viewController = [[GSLViewController alloc] init…];
 // ...
-GSViewController * __weak weakViewController = viewController;
+GSLViewController * __weak weakViewController = viewController;
 viewController.completionHandler =  ^(NSInteger result) {
     // この時点で存在するが、
     if (weakViewController) {
@@ -593,8 +593,8 @@ viewController.completionHandler =  ^(NSInteger result) {
     * 内部のみで読み書きする場合はクラス拡張で`readwrite`属性を指定すること。
 
 ```objective-c
-// GSObject.h
-@interface GSObject
+// GSLObject.h
+@interface GSLObject
 
 // 外部からは読み取り専用
 @property (readonly, copy) NSString *name;
@@ -603,8 +603,8 @@ viewController.completionHandler =  ^(NSInteger result) {
 ```
 
 ```objective-c
-// GSObject.m
-@interface GSObject ()
+// GSLObject.m
+@interface GSLObject ()
 
 // 内部からは読み書き可能
 @property (readwrite, copy) NSString *name;
@@ -617,7 +617,7 @@ viewController.completionHandler =  ^(NSInteger result) {
 **Right:**
 
 ```objective-c
-@interface GSObject
+@interface GSLObject
 
 // NSMutableStringをセットするとコピーされた別インスタンスを保持。
 @property (copy) NSString *name;
@@ -628,7 +628,7 @@ viewController.completionHandler =  ^(NSInteger result) {
 **Wrong:**
 
 ```objective-c
-@interface GSObject
+@interface GSLObject
 
 // NSMutableStringをセットすると外部より変更される可能性あり。
 @property NSString *name;
@@ -720,14 +720,14 @@ NSEnumerator *objectEnumerator = array.objectEnumerator;
 **Right:**
 
 ```objective-c
-@interface NSNumber (GSAdditions)
-+ (instancetype)gs_numberWithCGFloat:(double)value;
+@interface NSNumber (GSLAdditions)
++ (instancetype)gsl_numberWithCGFloat:(double)value;
 ```
 
 **Wrong:**
 
 ```objective-c
-@interface NSNumber (GSAdditions)
+@interface NSNumber (GSLAdditions)
 + (instancetype)numberWithCGFloat:(double)value;
 ```
 
@@ -743,14 +743,14 @@ NSEnumerator *objectEnumerator = array.objectEnumerator;
 * 独自定義のエラーを返す場合は適切なエラードメインとエラーコードを設定すること。
 
 ```objective-c
-extern NSString * const GSIMAPProtocolErrorDomain;
+extern NSString * const GSLIMAPProtocolErrorDomain;
 
-typedef NS_ENUM(NSInteger, GSIMAPProtocolError) {
-    GSIMAPProtocolErrorParseFailure    = -1,
-    GSIMAPProtocolErrorCommandSuccess  =  0,
-    GSIMAPProtocolErrorCommandFailure  =  1,
-    GSIMAPProtocolErrorProtocolError   =  2,
-    GSIMAPProtocolErrorConnectionClose =  3
+typedef NS_ENUM(NSInteger, GSLIMAPProtocolError) {
+    GSLIMAPProtocolErrorParseFailure    = -1,
+    GSLIMAPProtocolErrorCommandSuccess  =  0,
+    GSLIMAPProtocolErrorCommandFailure  =  1,
+    GSLIMAPProtocolErrorProtocolError   =  2,
+    GSLIMAPProtocolErrorConnectionClose =  3
 };
 ```
 
@@ -833,7 +833,7 @@ typedef NS_ENUM(NSInteger, GSIMAPProtocolError) {
 ### ヘッダファイル
 
 ```objective-c
-@interface GSSASL : NSObject
+@interface GSLSASL : NSObject
 
 - (instancetype)initClientWithService:(NSString *)service serverFQDN:(NSString *)serverFQDN IPLocalPort:(NSString *)IPLocalPort IPRemotePort:(NSString *)IPRemotePort error:(NSError **)error NS_DESIGNATED_INITIALIZER;
 
@@ -842,7 +842,7 @@ typedef NS_ENUM(NSInteger, GSIMAPProtocolError) {
 ### ソースファイル
 
 ```objective-c
-@implementation GSSASL
+@implementation GSLSASL
 
 // NSObjectの指定イニシャライザをオーバーライドする
 - (instancetype)init {
@@ -906,9 +906,9 @@ Cocoa Touchフレームワーク（modules）／C標準ヘッダ／フレーム�
 #import <utilities/tools/UIView+Extensions.h>
 
 // 5. アプリ
-#import "GSImageView.h"
-#import "GSMainView.h"
-#import "GSSubView.h"
+#import "GSLImageView.h"
+#import "GSLMainView.h"
+#import "GSLSubView.h"
 ```
 
 ### ヘッダファイル
@@ -917,16 +917,18 @@ Cocoa Touchフレームワーク（modules）／C標準ヘッダ／フレーム�
 
 ```objective-c
 //
-//  GSJSONObjectViewController.h
-//  GSDemo
+//  GSLJSONObjectViewController.h
+//  GSLDemo
 //
 
-@import UIKit;
+@import UIKit.UITableViewController;
 
 @class CBUUID, MKShape;
-@class GSObject;
+@class GSLObject;
 
-@interface GSJSONObjectViewController : UITableViewController
+NS_ASSUME_NONNULL_BEGIN
+
+@interface GSLJSONObjectViewController : UITableViewController
 
 + (instancetype)JSONObjectViewControllerWithJSONObject:(id)JSONObject;
 
@@ -935,6 +937,8 @@ Cocoa Touchフレームワーク（modules）／C標準ヘッダ／フレーム�
 - (instancetype)initWithJSONObject:(id)JSONObject NS_DESIGNATED_INITIALIZER;
 
 @end
+
+NS_ASSUME_NONNULL_END
 ```
 
 ### ソースファイル
@@ -953,19 +957,25 @@ Cocoa Touchフレームワーク（modules）／C標準ヘッダ／フレーム�
 
 ```objective-c
 //
-//  GSJSONObjectViewController.m
-//  GSDemo
+//  GSLJSONObjectViewController.m
+//  GSLDemo
 //
 
-#import "GSJSONObjectViewController.h"
+@import UIKit;
 
-@interface GSJSONObjectViewController ()
+#import "GSLJSONObjectViewController.h"
+
+NS_ASSUME_NONNULL_BEGIN
+
+@interface GSLJSONObjectViewController ()
 
 @property (nonatomic, readwrite, copy) id JSONObject;
 
 @end
 
-@implementation GSJSONObjectViewController
+NS_ASSUME_NONNULL_END
+
+@implementation GSLJSONObjectViewController
 
 // class methods
 
@@ -1036,6 +1046,8 @@ Cocoa Touchフレームワーク（modules）／C標準ヘッダ／フレーム�
 
 ## 改定履歴
 
+* 2018/04/12
+    * コード構成を修正。
 * 2017/11/08
     * リンクを修正。
 * 2017/08/14
