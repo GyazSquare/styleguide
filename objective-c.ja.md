@@ -872,7 +872,7 @@ typedef NS_ENUM(NSInteger, GSLIMAPProtocolError) {
 ## サブクラス
 
 * Cocoa Touchクラスで継承禁止のクラスやシングルトンクラス、クラスクラスタは原則継承しないこと。
-    * `NSManagedObjectContext`、`NSString`、`NSNotificationCenter`、`NSUserDefaults`、`UIAlertView`等々
+    * `NSManagedObjectContext`、`NSString`、`NSNotificationCenter`、`NSUserDefaults`等々
     * 継承が必要な場合は必ず公式ドキュメントでオーバーライドが必要なメソッドを必ず確認すること。
 * Cocoa Touchクラスを継承し、メソッド／プロパティをオーバーライドする場合は元のメソッドと事前／事後条件が一致するように実装を行うこと。
 * 継承クラスにて指定イニシャライザを定義する場合は以下のルールに従うものとする。
@@ -1063,10 +1063,6 @@ NS_ASSUME_NONNULL_END
 #pragma mark - NSKeyValueObserving
 
 // NSKeyValueObserving category methods
-
-#pragma mark - UIAlertViewDelegate
-
-// UIAlertViewDelegate category methods
 
 #pragma mark - UITableViewDataSource
 
