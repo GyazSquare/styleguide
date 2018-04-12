@@ -1,6 +1,6 @@
 # Objective-Cスタイルガイド
 
-改定日：2017/11/08
+改定日：2018/04/12
 
 ## はじめに
 
@@ -110,7 +110,7 @@ NSRange range2 = [string1 rangeOfString:string2 options:NSCaseInsensitiveSearch 
 例）定数の定義
 
 ```objective-c
-NSString * const GSErrorDomain = @"Generic Error Domain";
+NSString * const GSLErrorDomain = @"Generic Error Domain";
 ```
 
 例）三項演算子
@@ -122,13 +122,13 @@ return (string && string.length > 0) ? @"Succeeded." : @"Failed.";
 例）クラス宣言の開始部分
 
 ```objective-c
-@interface GSViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface GSLViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 ```
 
 例）クラス拡張の開始部分
 
 ```objective-c
-@interface GSViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface GSLViewController () <UITableViewDataSource, UITableViewDelegate>
 ```
 
 ### フォーマット
@@ -302,7 +302,7 @@ switch (expression) {
 ```objective-c
 static NSMutableArray *sKnownRegions = nil;
 + (instancetype)bundleWithPath:(NSString *)path;
-extern NSString * const GSIMAPProtocolErrorDomain;
+extern NSString * const GSLIMAPProtocolErrorDomain;
 ```
 
 **Wrong:**
@@ -310,7 +310,7 @@ extern NSString * const GSIMAPProtocolErrorDomain;
 ```objective-c
 static NSMutableArray* sKnownRegions = nil;
 + (instancetype)bundleWithPath:(NSString*)path;
-extern NSString *const GSIMAPProtocolErrorDomain;
+extern NSString *const GSLIMAPProtocolErrorDomain;
 ```
 
 ## 命名規則
@@ -436,7 +436,7 @@ static NSMutableArray *s_knownRegions = nil;
 ```
 
 ```objective-c
-// XXX: GSCalendarManager doesn't have the function to reset the access token.
+// XXX: GSLCalendarManager doesn't have the function to reset the access token.
 ```
 
 ## 変数
@@ -490,6 +490,7 @@ static UIOffset sOffset;
 * `NS_ENUM ` / `NS_OPTIONS`マクロ
 * `NS_DESIGNATED_INITIALIZER`マクロ
 * `NS_PROTOCOL_REQUIRES_EXPLICIT_IMPLEMENTATION `マクロ
+* `NS_ASSUME_NONNULL_BEGIN` / `NS_ASSUME_NONNULL_END` マクロ
 
 ## ARC
 
@@ -503,8 +504,8 @@ ClassName * qualifier variableName;
 ```
 
 ```objective-c
-GSClass * __weak weakReference;
-GSClass * __unsafe_unretained unsafeReference;
+GSLClass * __weak weakReference;
+GSLClass * __unsafe_unretained unsafeReference;
 ```
 
 ### __block変数
@@ -513,7 +514,7 @@ GSClass * __unsafe_unretained unsafeReference;
     * 使用後は`nil`を必ず代入すること。
 
 ```objective-c
-__block GSViewController *viewController = [GSViewController alloc] init…];
+__block GSLViewController *viewController = [GSLViewController alloc] init…];
 // ...
 viewController.completionHandler = ^(NSInteger result) {
     [viewController dismissViewControllerAnimated:YES completion:nil];
@@ -528,11 +529,11 @@ viewController.completionHandler = ^(NSInteger result) {
 **Right:**
 
 ```objective-c
-GSViewController *viewController = [[GSViewController alloc] init…];
+GSLViewController *viewController = [[GSLViewController alloc] init…];
 // ...
-GSViewController * __weak weakViewController = viewController;
+GSLViewController * __weak weakViewController = viewController;
 viewController.completionHandler = ^(NSInteger result) {
-    GSViewController *strongViewController = weakViewController; // スコープ終了までは保持されることが保証される。
+    GSLViewController *strongViewController = weakViewController; // スコープ終了までは保持されることが保証される。
     if (strongViewController) {
         // ...
         [strongViewController dismissViewControllerAnimated:YES completion:nil];
@@ -545,9 +546,9 @@ viewController.completionHandler = ^(NSInteger result) {
 **Wrong:**
 
 ```objective-c
-GSViewController *viewController = [[GSViewController alloc] init…];
+GSLViewController *viewController = [[GSLViewController alloc] init…];
 // ...
-GSViewController * __weak weakViewController = viewController;
+GSLViewController * __weak weakViewController = viewController;
 viewController.completionHandler =  ^(NSInteger result) {
     // この時点で存在するが、
     if (weakViewController) {
@@ -557,6 +558,54 @@ viewController.completionHandler =  ^(NSInteger result) {
     } else {
         // エラー処理
     }
+};
+```
+
+## ブロック
+
+### ブロックの宣言
+
+```objective-c
+int multiplier = 7;
+int (^myBlock)(int) = ^(int num) {
+    return num * multiplier;
+};
+```
+
+![blocks.jpg](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/Blocks/Art/blocks.jpg)
+
+* 引数リストには必ず指定すること。引数を取らない場合は `void` を指定すること。
+* 特定のシグネチャを持つブロックを複数の場所で使用する場合は、その型を作成すること。
+
+```objective-c
+void (^blockReturningVoidWithVoidArgument)(void);
+int (^blockReturningIntWithIntAndCharArguments)(int, char);
+void (^arrayOfTenBlocksReturningVoidWithIntArgument[10])(int);
+```
+
+```objective-c
+typedef NSComparisonResult (^NSComparator)(id obj1, id obj2);
+```
+
+### ブロックの実装
+
+* 戻り値は自動的に推論されるため、明示的に記述せず省略すること。
+* 戻り値が推論され、引数を取らない場合は `(void)` パラメータリストを省略すること。
+
+```objective-c
+// 引数を取る場合
+int (^oneFrom)(int);
+
+oneFrom = ^(int anInt) {
+    return anInt - 1;
+};
+
+// 引数を取らない場合
+int (^getInt)(void);
+
+getInt = ^{
+    int i = 1;
+    return i;
 };
 ```
 
@@ -593,8 +642,8 @@ viewController.completionHandler =  ^(NSInteger result) {
     * 内部のみで読み書きする場合はクラス拡張で`readwrite`属性を指定すること。
 
 ```objective-c
-// GSObject.h
-@interface GSObject
+// GSLObject.h
+@interface GSLObject
 
 // 外部からは読み取り専用
 @property (readonly, copy) NSString *name;
@@ -603,8 +652,8 @@ viewController.completionHandler =  ^(NSInteger result) {
 ```
 
 ```objective-c
-// GSObject.m
-@interface GSObject ()
+// GSLObject.m
+@interface GSLObject ()
 
 // 内部からは読み書き可能
 @property (readwrite, copy) NSString *name;
@@ -617,7 +666,7 @@ viewController.completionHandler =  ^(NSInteger result) {
 **Right:**
 
 ```objective-c
-@interface GSObject
+@interface GSLObject
 
 // NSMutableStringをセットするとコピーされた別インスタンスを保持。
 @property (copy) NSString *name;
@@ -628,7 +677,7 @@ viewController.completionHandler =  ^(NSInteger result) {
 **Wrong:**
 
 ```objective-c
-@interface GSObject
+@interface GSLObject
 
 // NSMutableStringをセットすると外部より変更される可能性あり。
 @property NSString *name;
@@ -720,14 +769,14 @@ NSEnumerator *objectEnumerator = array.objectEnumerator;
 **Right:**
 
 ```objective-c
-@interface NSNumber (GSAdditions)
-+ (instancetype)gs_numberWithCGFloat:(double)value;
+@interface NSNumber (GSLAdditions)
++ (instancetype)gsl_numberWithCGFloat:(double)value;
 ```
 
 **Wrong:**
 
 ```objective-c
-@interface NSNumber (GSAdditions)
+@interface NSNumber (GSLAdditions)
 + (instancetype)numberWithCGFloat:(double)value;
 ```
 
@@ -743,14 +792,14 @@ NSEnumerator *objectEnumerator = array.objectEnumerator;
 * 独自定義のエラーを返す場合は適切なエラードメインとエラーコードを設定すること。
 
 ```objective-c
-extern NSString * const GSIMAPProtocolErrorDomain;
+extern NSString * const GSLIMAPProtocolErrorDomain;
 
-typedef NS_ENUM(NSInteger, GSIMAPProtocolError) {
-    GSIMAPProtocolErrorParseFailure    = -1,
-    GSIMAPProtocolErrorCommandSuccess  =  0,
-    GSIMAPProtocolErrorCommandFailure  =  1,
-    GSIMAPProtocolErrorProtocolError   =  2,
-    GSIMAPProtocolErrorConnectionClose =  3
+typedef NS_ENUM(NSInteger, GSLIMAPProtocolError) {
+    GSLIMAPProtocolErrorParseFailure    = -1,
+    GSLIMAPProtocolErrorCommandSuccess  =  0,
+    GSLIMAPProtocolErrorCommandFailure  =  1,
+    GSLIMAPProtocolErrorProtocolError   =  2,
+    GSLIMAPProtocolErrorConnectionClose =  3
 };
 ```
 
@@ -823,7 +872,7 @@ typedef NS_ENUM(NSInteger, GSIMAPProtocolError) {
 ## サブクラス
 
 * Cocoa Touchクラスで継承禁止のクラスやシングルトンクラス、クラスクラスタは原則継承しないこと。
-    * `NSManagedObjectContext`、`NSString`、`NSNotificationCenter`、`NSUserDefaults`、`UIAlertView`等々
+    * `NSManagedObjectContext`、`NSString`、`NSNotificationCenter`、`NSUserDefaults`等々
     * 継承が必要な場合は必ず公式ドキュメントでオーバーライドが必要なメソッドを必ず確認すること。
 * Cocoa Touchクラスを継承し、メソッド／プロパティをオーバーライドする場合は元のメソッドと事前／事後条件が一致するように実装を行うこと。
 * 継承クラスにて指定イニシャライザを定義する場合は以下のルールに従うものとする。
@@ -833,7 +882,7 @@ typedef NS_ENUM(NSInteger, GSIMAPProtocolError) {
 ### ヘッダファイル
 
 ```objective-c
-@interface GSSASL : NSObject
+@interface GSLSASL : NSObject
 
 - (instancetype)initClientWithService:(NSString *)service serverFQDN:(NSString *)serverFQDN IPLocalPort:(NSString *)IPLocalPort IPRemotePort:(NSString *)IPRemotePort error:(NSError **)error NS_DESIGNATED_INITIALIZER;
 
@@ -842,7 +891,7 @@ typedef NS_ENUM(NSInteger, GSIMAPProtocolError) {
 ### ソースファイル
 
 ```objective-c
-@implementation GSSASL
+@implementation GSLSASL
 
 // NSObjectの指定イニシャライザをオーバーライドする
 - (instancetype)init {
@@ -876,6 +925,41 @@ typedef NS_ENUM(NSInteger, GSIMAPProtocolError) {
 * Objective-CのクラスをObjective-C++`.mm`ファイルに記述し、Cコンパイラでビルドしないこと。
     * リンクできるが、実行時に予期せぬエラーを引き起こすため。
 
+## API可用性
+
+* Base SDKがmacOS 10.13、iOS 11、tvOS 11、watchOS 4 (Xcode 9) 以降の場合は `@available` を利用して実行時システムバージョンをチェックすること。
+
+```objective-c
+if (@available(macOS 10.13, iOS 11, *)) {
+    // Use macOS 10.13 APIs on macOS, and use iOS 11 APIs on iOS
+} else {
+    // Fall back to earlier macOS and iOS APIs
+}
+```
+
+* Base SDKが上記より前の場合は、下記ドキュメントに従い、ウィークリンクを用いるか、システムバージョンに依存する処理の場合は `NSProcessInfo` (`Foundation`)、`UIDevice` (`UIKit`) を用いること。
+
+    * [SDK Compatibility Guide](https://developer.apple.com/library/content/documentation/DeveloperTools/Conceptual/cross_development/Introduction/Introduction.html#//apple_ref/doc/uid/10000163-BCICHGIE)（[SDK互換性ガイド](https://developer.apple.com/jp/documentation/cross_development.pdf)）
+
+
+```objective-c
+NSString *requiredSystemVersion = @"10";
+if ([UIDevice.currentDevice.systemVersion compare:requiredSystemVersion options:NSNumericSearch] != NSOrderedDescending) {
+    // Use iOS 10 APIs on iOS, and use tvOS 10 APIs on tvOS
+} else {
+    // Fall back to earlier iOS and tvOS APIs
+}
+```
+
+```objective-c
+NSOperatingSystemVersion requiredSystemVersion = (NSOperatingSystemVersion){10, 0, 0};
+if ([NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:requiredSystemVersion]) {
+    // Use macOS 10 APIs, iOS 10 APIs, watchOS 10 APIs, and tvOS 10 APIs
+} else {
+    // Fall back to earlier macOS, iOS, watchOS, and tvOS APIs
+}
+```
+
 <!-- ## Swift対応 -->
 <!-- -->
 <!-- ### Null許容性 -->
@@ -906,9 +990,9 @@ Cocoa Touchフレームワーク（modules）／C標準ヘッダ／フレーム�
 #import <utilities/tools/UIView+Extensions.h>
 
 // 5. アプリ
-#import "GSImageView.h"
-#import "GSMainView.h"
-#import "GSSubView.h"
+#import "GSLImageView.h"
+#import "GSLMainView.h"
+#import "GSLSubView.h"
 ```
 
 ### ヘッダファイル
@@ -917,16 +1001,18 @@ Cocoa Touchフレームワーク（modules）／C標準ヘッダ／フレーム�
 
 ```objective-c
 //
-//  GSJSONObjectViewController.h
-//  GSDemo
+//  GSLJSONObjectViewController.h
+//  GSLDemo
 //
 
-@import UIKit;
+@import UIKit.UITableViewController;
 
 @class CBUUID, MKShape;
-@class GSObject;
+@class GSLObject;
 
-@interface GSJSONObjectViewController : UITableViewController
+NS_ASSUME_NONNULL_BEGIN
+
+@interface GSLJSONObjectViewController : UITableViewController
 
 + (instancetype)JSONObjectViewControllerWithJSONObject:(id)JSONObject;
 
@@ -935,6 +1021,8 @@ Cocoa Touchフレームワーク（modules）／C標準ヘッダ／フレーム�
 - (instancetype)initWithJSONObject:(id)JSONObject NS_DESIGNATED_INITIALIZER;
 
 @end
+
+NS_ASSUME_NONNULL_END
 ```
 
 ### ソースファイル
@@ -953,19 +1041,25 @@ Cocoa Touchフレームワーク（modules）／C標準ヘッダ／フレーム�
 
 ```objective-c
 //
-//  GSJSONObjectViewController.m
-//  GSDemo
+//  GSLJSONObjectViewController.m
+//  GSLDemo
 //
 
-#import "GSJSONObjectViewController.h"
+@import UIKit;
 
-@interface GSJSONObjectViewController ()
+#import "GSLJSONObjectViewController.h"
+
+NS_ASSUME_NONNULL_BEGIN
+
+@interface GSLJSONObjectViewController ()
 
 @property (nonatomic, readwrite, copy) id JSONObject;
 
 @end
 
-@implementation GSJSONObjectViewController
+NS_ASSUME_NONNULL_END
+
+@implementation GSLJSONObjectViewController
 
 // class methods
 
@@ -1005,10 +1099,6 @@ Cocoa Touchフレームワーク（modules）／C標準ヘッダ／フレーム�
 
 // NSKeyValueObserving category methods
 
-#pragma mark - UIAlertViewDelegate
-
-// UIAlertViewDelegate category methods
-
 #pragma mark - UITableViewDataSource
 
 // UITableViewDataSource category methods
@@ -1036,6 +1126,10 @@ Cocoa Touchフレームワーク（modules）／C標準ヘッダ／フレーム�
 
 ## 改定履歴
 
+* 2018/04/12
+    * ブロックを追加。
+    * API可用性を追加。
+    * コード構成を修正。
 * 2017/11/08
     * リンクを修正。
 * 2017/08/14
