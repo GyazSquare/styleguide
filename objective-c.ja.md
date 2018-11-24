@@ -1,6 +1,6 @@
 # Objective-Cスタイルガイド
 
-改定日：2018/04/12
+改定日：2018/11/24
 
 ## はじめに
 
@@ -45,7 +45,7 @@
 ### 改行
 
 読みやすく、かつ検索や比較がしやすいよう、改行は次のようにおこなう。
-改修やレビューにさしつかえるほど長くならないよう工夫すること。
+なお、改修やレビューにさしつかえるほど長くならないよう[1行80文字](https://en.wikipedia.org/wiki/Characters_per_line#In_programming)を目処に工夫すること。
 
 * 次で改行する。
     * `;` の直後
@@ -960,12 +960,19 @@ if ([NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:requiredSystemVer
 }
 ```
 
-<!-- ## Swift対応 -->
-<!-- -->
-<!-- ### Null許容性 -->
-<!-- -->
-<!-- ### 軽量ジェネリクス -->
-<!-- -->
+## Swift言語との相互運用性
+
+Swift言語との相互運用性を考慮した実装を心掛けること。
+
+* [Designating Nullability in Objective-C APIs](https://developer.apple.com/documentation/swift/objective-c_and_c_code_customization/designating_nullability_in_objective-c_apis)
+* [Renaming Objective-C APIs for Swift](https://developer.apple.com/documentation/swift/objective-c_and_c_code_customization/renaming_objective-c_apis_for_swift)
+* [Improving Objective-C API Declarations for Swift](https://developer.apple.com/documentation/swift/objective-c_and_c_code_customization/improving_objective-c_api_declarations_for_swift)
+* [Grouping Related Objective-C Constants](https://developer.apple.com/documentation/swift/objective-c_and_c_code_customization/grouping_related_objective-c_constants)
+* [Marking API Availability in Objective-C](https://developer.apple.com/documentation/swift/objective-c_and_c_code_customization/marking_api_availability_in_objective-c)
+* [Making Objective-C APIs Unavailable in Swift](https://developer.apple.com/documentation/swift/objective-c_and_c_code_customization/making_objective-c_apis_unavailable_in_swift)
+* Lightweight Generics, Kindof types
+    * [WWDC 2015 Swift and Objective-C Interoperability](https://developer.apple.com/videos/play/wwdc2015/401/)
+
 ## コード構成
 
 ### インポートファイル例
@@ -1126,6 +1133,8 @@ NS_ASSUME_NONNULL_END
 
 ## 改定履歴
 
+* 2018/11/24
+    * Swift言語との相互運用性を追加。
 * 2018/04/12
     * ブロックを追加。
     * API可用性を追加。
