@@ -1,6 +1,6 @@
 # Objective-Cスタイルガイド
 
-改定日：2018/11/24
+改定日：2018/11/29
 
 ## はじめに
 
@@ -426,6 +426,7 @@ static NSMutableArray *s_knownRegions = nil;
     * `TODO`：やらなければならないこと。
     * `FIXME`：バグがあり、正しく動作しない。
     * `XXX`：バグがあるが、大抵の場合は動作する。
+    * `HACK`：ライブラリバグ回避コードなど、改善が必要。
 
 ```objective-c
 // TODO: Master information advance registration
@@ -437,6 +438,10 @@ static NSMutableArray *s_knownRegions = nil;
 
 ```objective-c
 // XXX: GSLCalendarManager doesn't have the function to reset the access token.
+```
+
+```objective-c
+// HACK: Not very well written or malformed code to circumvent a problem/bug.
 ```
 
 ## 変数
@@ -1133,6 +1138,8 @@ NS_ASSUME_NONNULL_END
 
 ## 改定履歴
 
+* 2018/11/29
+    * コメントに `HACK` プレフィックスを追加。
 * 2018/11/24
     * Swift言語との相互運用性を追加。
 * 2018/04/12
